@@ -1,0 +1,42 @@
+<div class="container">
+
+  <div class="comment-item" *ngFor="let comment of comments$ | async; let idx = index">
+    <div>
+      <b>{{comment.userName}}</b> -
+      <small>{{comment.date | date:'MMM d'}}</small>
+    </div>
+    <div>
+      <b> Comment:</b> {{comment.content}}
+    </div>
+
+    <!-- Section to edit a comment -->
+    <div *ngIf="editComment == comment.docId">
+      <input type="text" [(ngModel)]="comment.content" style="width: 80%">
+      <button (click)="onEdit(comment)">save</button>
+      <button (click)="editComment = ''">cancel</button>
+    </div>
+
+    <!-- Buttons to edit, delete and view reply of a comment -->
+    <button (click)="editComment = comment.docId">Edit</button>
+    <button (click)="onDelete(comment)">Delete</button>
+    <button (click)="viewReply = comment.docId; onViewReply(comment)"> View Reply </button>
+
+    <!-- Container for dynamic content -->
+    <div class="dynamicContainer" *ngIf="viewReply == comment.docId">
+      <ng-template #dynamic></ng-template>
+    </div>
+
+  </div>
+
+  <div class="editor">
+    <!-- Edit to create a new comment -->
+    <input type="text" class="comment" placeholder="Type your comment here" name="content"
+      [(ngModel)]="comment.content">
+    <div class="btns">
+      <button (click)="onComment(comment)">
+        Comment
+      </button>
+    </div>
+  </div>
+
+</div>
